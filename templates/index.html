@@ -5,83 +5,92 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Halcyon</title>
 
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7; /* Light Gray Background Color */
+            color: #333; /* Text Color */
+            margin: 0;
+            padding: 0;
+        }
+
+        h1, h2, h3 {
+            color: #007bff; /* Accent Color */
+        }
+
+        a {
+            color: #007bff; /* Link Color */
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        section {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff; /* White Background Color */
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        form {
+            display: grid;
+            gap: 10px;
+        }
+
+        input, button {
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #007bff; /* Button Color */
+            color: #fff; /* Button Text Color */
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3; /* Button Hover Color */
+        }
+
+        #chatbox {
+            border: 1px solid #ccc;
+            padding: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+    </style>
+
+    <!-- Your existing scripts go here -->
     <script src="{{ url_for('static', filename='chatbot.js') }}"></script>
 
     <script>
-        function sendFeedback() {
-          const feedbackMessage = document.getElementById('feedbackMessage').value;
-          fetch('/feedback', {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json',
-            },
-              body: JSON.stringify({ message: feedbackMessage }),
-          })
-          .then(response => response.json())
-          .then(data => {
-            alert(data.message);
-          })
-          .catch(error => console.error('Error', error));
-          document.getElementById('feedbackMessage').value = '';
-        }
-
-        function sendChatMessage() {
-            const userMessage = document.getElementById('userMessage').value;
-
-            // Display user's message in the chatbox
-            appendMessage('You', userMessage);
-
-            // Simulate chatbot response (in a real scenario, this would be fetched from a server)
-            const chatbotResponse = getChatbotResponse(userMessage);
-
-            // Display chatbot's response in the chatbox after a short delay
-            setTimeout(() => {
-                appendMessage('Chatbot', chatbotResponse);
-            }, 500);
-        }
-
-        function appendMessage(sender, message) {
-            const chatbox = document.getElementById('chatbox');
-            const messageElement = document.createElement('p');
-            messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
-            chatbox.appendChild(messageElement);
-        }
-
-        function getChatbotResponse(userMessage) {
-            if (userMessage.toLowerCase().includes('sad')) {
-                return "I'm here to listen. What's on your mind?";
-            } else if (userMessage.toLowerCase().includes('happy')) {
-                return "That's great! What brought you joy today?";
-            } else {
-                return "I'm here to provide emotional support. Feel free to share your thoughts.";
-            }
-        }
+        // Your existing scripts go here
     </script>
 </head>
 <body>
 
-<!-- Index Section -->
-<div id="index">
-    <h1>Welcome to Halcyon "Empowering every mind, every day"</h1>
-    <p><a href="{{ url_for('login') }}">Login</a> or <a href="{{ url_for('register') }}">Register</a></p>
-</div>
+<!-- Header Section -->
+<header>
+    <h1>Halcyon</h1>
+    <p>Empowering Every Mind, Every Day</p>
+</header>
 
-<!-- Register Section -->
-<div id="register">
-    <h1>Register</h1>
-    <form method="post" action="{{ url_for('register') }}">
-        <label for="username">Username:</label>
-        <input type="text" name="username" required>
-        <label for="password">Password:</label>
-        <input type="password" name="password" required>
-        <button type="submit">Register</button>
-    </form>
-    <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
-</div>
-
-<!-- Login Section -->
-<div id="login">
-    <h1>Login</h1>
+<!-- Login/Register Section -->
+<section id="login_register">
+    <h2>Login or Register</h2>
     <form method="post" action="{{ url_for('login') }}">
         <label for="username">Username:</label>
         <input type="text" name="username" required>
@@ -90,59 +99,136 @@
         <button type="submit">Login</button>
     </form>
     <p>Don't have an account? <a href="{{ url_for('register') }}">Register here</a></p>
+</section>
+
+<!-- User Dashboard Section -->
+<section id="user_dashboard" style="display: none;">
+    <h2>Welcome, John Doe!</h2>
+    
+    <!-- User Account Information -->
+    <div>
+        <h3>User Account Information</h3>
+        <p>Username: john_doe</p>
+        <p>Email: john.doe@example.com</p>
+    </div>
+<!-- Teletherapy Section -->
+<div>
+    <h3>Teletherapy</h3>
+    <p>Access teletherapy sessions for professional support from the comfort of your home.</p>
+
+    <!-- Schedule Teletherapy Form -->
+    <form method="post" action="{{ url_for('schedule_teletherapy') }}">
+        <label for="date">Select Date:</label>
+        <input type="date" name="date" required>
+
+        <label for="time">Select Time:</label>
+        <input type="time" name="time" required>
+
+        <label for="duration">Session Duration (in minutes):</label>
+        <input type="number" name="duration" min="30" max="120" required>
+
+        <button type="submit">Schedule Teletherapy</button>
+    </form>
+
+    <!-- Teletherapy Schedule History -->
+    <h4>Upcoming Teletherapy Sessions</h4>
+    <ul>
+        <li><strong>Date:</strong> January 15, 2023</li>
+        <li><strong>Time:</strong> 3:00 PM</li>
+        <li><strong>Duration:</strong> 60 minutes</li>
+    </ul>
+
+    <!-- Display past teletherapy sessions if needed -->
+    <h4>Past Teletherapy Sessions</h4>
+    <ul>
+        <li><strong>Date:</strong> December 20, 2022</li>
+        <li><strong>Time:</strong> 2:30 PM</li>
+        <li><strong>Duration:</strong> 45 minutes</li>
+    </ul>
 </div>
 
-<!-- Dashboard Section -->
-<div id="dashboard">
-    <h1>Welcome, John Doe!</h1>
-    <h2>Log your mood:</h2>
-    <form method="post" action="{{ url_for('dashboard') }}">
-        <label for="mood">Mood:</label>
-        <input type="text" name="mood" required>
-        <button type="submit">Log Mood</button>
+<!-- Mood Tracking Section -->
+<div>
+    <h3>Mood Tracking</h3>
+    <p>Track your mood over time to better understand your emotional well-being.</p>
+
+    <!-- Mood Tracking Form -->
+    <form method="post" action="{{ url_for('track_mood') }}">
+        <label for="mood">Current Mood:</label>
+        <select name="mood" required>
+            <option value="happy">Happy</option>
+            <option value="sad">Sad</option>
+            <option value="neutral">Neutral</option>
+        </select>
+
+        <label for="notes">Additional Notes:</label>
+        <textarea name="notes" rows="4" placeholder="Add any additional notes..."></textarea>
+
+        <button type="submit">Track Mood</button>
     </form>
-  
-    <h2>Chat with the Emotional Support Chatbot:</h2>
+
+    <!-- Mood Tracking History -->
+    <h4>Mood Tracking History</h4>
+    <ul>
+        <li>
+            <strong>Date:</strong> January 10, 2023
+            <strong>Mood:</strong> Happy
+            <strong>Notes:</strong> Enjoyed a relaxing day at the park.
+        </li>
+        <li>
+            <strong>Date:</strong> January 5, 2023
+            <strong>Mood:</strong> Sad
+            <strong>Notes:</strong> Feeling overwhelmed with work.
+        </li>
+    </ul>
+</div>
+
+<!--Emotional Chatbot Section-->
+    <h3>Chat with the Emotional Support Chatbot:</h3>
     <div id="chatbox"></div>
     <input type="text" id="userMessage" placeholder="Type your message...">
     <button onclick="sendChatMessage()">Send</button>
-
-</div>
+    <img src="https://via.placeholder.com/800x400/4caf50/ffffff?text=Happy+People" alt="Happy People">
+</section>
 
 <!-- Crisis Response Section -->
-<div id="crisis_response">
-    <h1>Crisis Response Resources</h1>
+<section id="crisis_response">
+    <h2>Crisis Response Resources</h2>
+    <img src="https://via.placeholder.com/800x400/4caf50/ffffff?text=Happy+People" alt="Happy People">
     <p>If you or someone you know is in crisis, please reach out to the following resources:</p>
-  <ul> 
-    <li><strong>National Suicide Prvention Lifeline:</strong> 1-800-273-TALK (1-800-273-8255)</li>
-    <li><strong>Crisis Text Line:</strong> Text "HELLO" to 741741</li>
-    <li><strong>Emergency Services:</strong> Dail 911</li>
-  </ul>
-</div>
+    <ul> 
+        <li><strong>National Suicide Prevention Lifeline:</strong> 1-800-273-TALK (1-800-273-8255)</li>
+        <li><strong>Crisis Text Line:</strong> Text "HELLO" to 741741</li>
+        <li><strong>Emergency Services:</strong> Dial 911</li>
+    </ul>
+</section>
 
 <!-- Create Peer Group Section -->
-<div id="create_group">
-    <h1>Create a Peer Group</h1>
+<section id="create_group">
+    <h2>Create a Peer Group</h2>
+    <img src="https://via.placeholder.com/800x400/4caf50/ffffff?text=Happy+People" alt="Happy People">
     <form method="post" action="{{ url_for('create_group') }}">
         <label for="group_name">Group Name:</label>
         <input type="text" name="group_name" required>
         <button type="submit">Create Group</button>
     </form>
-</div>
+</section>
 
 <!-- Join Peer Group Section -->
-<div id="join_group">
-    <h1>Join a Peer Group</h1>
+<section id="join_group">
+    <h2>Join a Peer Group</h2>
+    <img src="https://via.placeholder.com/800x400/4caf50/ffffff?text=Happy+People" alt="Happy People">
     <form method="post" action="{{ url_for('join_group') }}">
         <label for="group_name">Group Name:</label>
         <input type="text" name="group_name" required>
         <button type="submit">Join Group</button>
     </form>
-</div>
+</section>
 
 <!-- Peer Group Chat Section -->
-<div id="peer_group_chat">
-    <h1>Peer Group Chat - Group Name</h1>
+<section id="peer_group_chat">
+    <h2>Peer Group Chat - Group Name</h2>
+    <img src="https://via.placeholder.com/800x400/4caf50/ffffff?text=Happy+People" alt="Happy People">
     <div id="chatbox">
         <p><strong>John Doe:</strong> Hello, everyone!</p>
     </div>
@@ -151,21 +237,23 @@
         <input type="text" name="message" required>
         <button type="submit">Send Message</button>
     </form>
-</div>
+</section>
 
 <!-- Mental Health Activities Section -->
-<div id="mental_health_activities">
-    <h1>Mental Health Exercises and Games</h1>
-    <p>Explore activities, exercies, and games to support your mental health well-being:</p>
-  <ul>
-    <li><a href="https://www.headspace.com/meditation/mindfulness">Mindfulness Meditation</a</li>
-    <li><a href="https://www.medicalnewstoday.com/articles/324417">Deep Breathing Excerises</a</li>
-    <li><a href="https://positivepsychology.com/daily-positive-affirmations/">Positive Affirmations</a</li>
-    <li><a href="https://www.calm.com/">Calm - Meditation and Sleep Stories</a></li>
-    <li><a href="https://www.happify.com/">Happify - Science-Based Activities and Games</a></li>
-    <li><a href="https://www.psychologytools.com/resource/coping-styles-wheel/">Coping Styles Wheel</a></li>
-  </ul>
-</div>
+<section id="mental_health_activities">
+    <h2>Mental Health Exercises and Games</h2>
+    <img src="https://via.placeholder.com/800x400/4caf50/ffffff?text=Happy+People" alt="Happy People">
+    <p>Explore activities, exercises, and games to support your mental health well-being:</p>
+    <ul>
+        <li><a href="https://www.headspace.com/meditation/mindfulness">Mindfulness Meditation</a></li>
+        <li><a href="https://www.medicalnewstoday.com/articles/324417">Deep Breathing Exercises</a></li>
+        <li><a href="https://positivepsychology.com/daily-positive-affirmations/">Positive Affirmations</a></li>
+        <li><a href="https://www.calm.com/">Calm - Meditation and Sleep Stories</a></li>
+        <li><a href="https://www.happify.com/">Happify - Science-Based Activities and Games</a></li>
+        <li><a href="https://www.psychologytools.com/resource/coping-styles-wheel/">Coping Styles Wheel</a></li>
+    </ul>
+</section>
 
 </body>
 </html>
+
